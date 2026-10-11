@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 現状
 
-ステップ1(下書き生成・未入力判定のロジックとテスト)まで完了。ロジックは `lib/cr/` にあり、画面にはまだつないでいない(入力欄はない)。実装計画のステップ2以降は、ユーザーの指示を受けてから1つずつ進める。
+ステップ2(F-01 部位入力)まで完了。画面にあるのは処置部位の入力欄だけで、処置内容以降の入力欄・未入力一覧・下書き生成はまだ画面にない(ロジックは `lib/cr/` に実装済み)。実装計画のステップ3以降は、ユーザーの指示を受けてから1つずつ進める。
 
 ## コマンド
 
@@ -23,7 +23,9 @@ npx vitest run lib/cr/buildDraft.test.ts     # ファイルを指定
 npx vitest run -t "麻酔"                      # テスト名の一部で絞り込む
 ```
 
-テストは `lib/**/*.test.ts` が対象(`vitest.config.mts`)。テストの入力にも架空の情報だけを使う。
+テストは `lib/**/*.test.ts` と `components/**/*.test.tsx` が対象(`vitest.config.mts`)。テストの入力にも架空の情報だけを使う。
+
+コンポーネントのテストは `renderToStaticMarkup` で表示内容だけを確認している(jsdom は入れていない)。クリックなどの操作とスマートフォン幅の表示はテストでは確認できないので、ブラウザで確認する。
 
 ## ロジックの構成(`lib/cr/`)
 
@@ -35,6 +37,12 @@ npx vitest run -t "麻酔"                      # テスト名の一部で絞り
 - `buildDraft.ts`:`buildDraft(form)` が「ラベル:値」の行を固定順に並べ、値がある行だけを出す。`generateDraft(form)` は必須項目が不足していれば生成せず理由を返す。画面からは `generateDraft` を使う
 
 選択肢や下書きの文言を変えたら、同じ内容を固定しているテストも一緒に直す。
+
+## 画面の構成(`components/`)
+
+- `CrRecordForm.tsx`:入力全体の `FormState` を `useState` で持つ親。`"use client"` はここだけに付ける。各セクションには `form` と `onChange(patch)` を渡す
+- `ToothSection.tsx`:処置部位(F-01)。歯面は上顎・下顎と番号が決まるまで選択欄を出さず、案内文を表示する
+- `ChoiceChip.tsx`:選択肢1つ分の部品(ラジオ・チェックボックス共通)。選択中は色に加えて「✓」と太字で示す。以降のステップの選択肢もこれを使う
 
 Next.js 16(App Router、Turbopack)/ React 19 / Tailwind CSS 4。Next.js 16 は以前の版と API や規約が異なるため、Next.js の機能を使うコードを書く前に `AGENTS.md` の指示に従い `node_modules/next/dist/docs/` の該当ガイドを確認する。
 
