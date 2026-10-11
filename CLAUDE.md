@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 現状
 
-ステップ2(F-01 部位入力)まで完了。画面にあるのは処置部位の入力欄だけで、処置内容以降の入力欄・未入力一覧・下書き生成はまだ画面にない(ロジックは `lib/cr/` に実装済み)。実装計画のステップ3以降は、ユーザーの指示を受けてから1つずつ進める。
+ステップ3(F-02 処置入力)まで完了。画面にあるのは処置部位と処置内容の入力欄で、説明・次回予定・補足の入力欄、未入力一覧、下書き生成はまだ画面にない(ロジックは `lib/cr/` に実装済み)。実装計画のステップ4以降は、ユーザーの指示を受けてから1つずつ進める。
 
 ## コマンド
 
@@ -35,6 +35,7 @@ npx vitest run -t "麻酔"                      # テスト名の一部で絞り
 - `options.ts`:確認済みの選択肢とラベル。歯面は位置のキー(`occlusal` など)で保持し、表示名は `getSurfaceLabels(jaw, toothNumber)` で歯の位置から決める。歯を変えても選択は残り、名称だけが切り替わる
 - `missingItems.ts`:`getMissingItems(form)` が「必須(`required`)」「確認してください(`needsConfirmation`)」「任意(`optional`)」の3グループを返す。生成を止めるのは `required` だけ
 - `buildDraft.ts`:`buildDraft(form)` が「ラベル:値」の行を固定順に並べ、値がある行だけを出す。`generateDraft(form)` は必須項目が不足していれば生成せず理由を返す。画面からは `generateDraft` を使う
+- `formUpdates.ts`:入力を変えるときの決まりごと。`anesthesiaPatch(value)` は麻酔を「使用あり」以外に変えたときに詳細を消す。麻酔の変更は必ずこれを通す(詳細を残すと、あとで「使用あり」に戻したとき以前の詳細が下書きに混入する)
 
 選択肢や下書きの文言を変えたら、同じ内容を固定しているテストも一緒に直す。
 
@@ -42,7 +43,10 @@ npx vitest run -t "麻酔"                      # テスト名の一部で絞り
 
 - `CrRecordForm.tsx`:入力全体の `FormState` を `useState` で持つ親。`"use client"` はここだけに付ける。各セクションには `form` と `onChange(patch)` を渡す
 - `ToothSection.tsx`:処置部位(F-01)。歯面は上顎・下顎と番号が決まるまで選択欄を出さず、案内文を表示する
+- `ProcedureSection.tsx`:処置内容(F-02)。処置8項目、補足、麻酔、麻酔の詳細(「使用あり」のときだけ表示)、使用材料、色調
 - `ChoiceChip.tsx`:選択肢1つ分の部品(ラジオ・チェックボックス共通)。選択中は色に加えて「✓」と太字で示す。以降のステップの選択肢もこれを使う
+- `TextField.tsx`:自由入力欄1つ分の部品(1行・複数行共通)。ブラウザに入力履歴を残させないよう `autoComplete="off"` を付けている。以降のステップの自由入力欄もこれを使う
+- `Badge.tsx`:「必須」「任意」の表示
 
 Next.js 16(App Router、Turbopack)/ React 19 / Tailwind CSS 4。Next.js 16 は以前の版と API や規約が異なるため、Next.js の機能を使うコードを書く前に `AGENTS.md` の指示に従い `node_modules/next/dist/docs/` の該当ガイドを確認する。
 

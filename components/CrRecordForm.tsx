@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import ProcedureSection from "./ProcedureSection";
 import ToothSection from "./ToothSection";
 import { createEmptyForm } from "@/lib/cr/types";
 import type { FormState } from "@/lib/cr/types";
@@ -14,8 +15,9 @@ export default function CrRecordForm() {
   };
 
   return (
-    <form onSubmit={(event) => event.preventDefault()}>
+    <form autoComplete="off" onSubmit={(event) => event.preventDefault()}>
       <ToothSection form={form} onChange={update} />
+      <ProcedureSection form={form} onChange={update} />
     </form>
   );
 }

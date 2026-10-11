@@ -1,3 +1,4 @@
+import Badge from "./Badge";
 import ChoiceChip from "./ChoiceChip";
 import {
   JAW_LABELS,
@@ -15,14 +16,6 @@ type Props = {
 
 const JAWS: readonly Jaw[] = ["upper", "lower"];
 const SIDES: readonly Side[] = ["right", "left"];
-
-function Badge({ children }: { children: string }) {
-  return (
-    <span className="ml-2 rounded border border-foreground/40 px-1.5 py-0.5 text-sm font-normal">
-      {children}
-    </span>
-  );
-}
 
 export default function ToothSection({ form, onChange }: Props) {
   // 歯面の名称は上顎・下顎と番号で決まるので、両方が決まるまで選択させない
