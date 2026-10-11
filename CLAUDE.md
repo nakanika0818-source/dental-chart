@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 現状
 
-ステップ0(Next.js の雛形とデモ表示)まで完了。入力欄・下書き生成はまだない。実装計画のステップ1以降は、ユーザーの指示を受けてから1つずつ進める。
+ステップ1(下書き生成・未入力判定のロジックとテスト)まで完了。ロジックは `lib/cr/` にあり、画面にはまだつないでいない(入力欄はない)。実装計画のステップ2以降は、ユーザーの指示を受けてから1つずつ進める。
 
 ## コマンド
 
@@ -13,9 +13,28 @@ npm run dev     # 開発サーバー(http://localhost:3000)
 npm run build   # 本番ビルド
 npm run start   # ビルド結果を起動(先に build が必要)
 npm run lint    # ESLint
+npm test        # Vitest(全テストを1回実行)
 ```
 
-テストはまだない(ステップ1で Vitest を追加する予定。追加したら単体テストの実行方法をここに書く)。
+テストを1つだけ実行するとき:
+
+```
+npx vitest run lib/cr/buildDraft.test.ts     # ファイルを指定
+npx vitest run -t "麻酔"                      # テスト名の一部で絞り込む
+```
+
+テストは `lib/**/*.test.ts` が対象(`vitest.config.mts`)。テストの入力にも架空の情報だけを使う。
+
+## ロジックの構成(`lib/cr/`)
+
+画面から切り離した純粋関数で、React や保存先に依存しない。画面(ステップ2以降)はここを呼ぶだけにする。
+
+- `types.ts`:入力データの型 `FormState` と、すべて未入力の初期値を返す `createEmptyForm()`。未入力は `null`・空配列・空文字、麻酔の「未確認」は `"unconfirmed"`、「使用なし」は `"notUsed"` と別の値で持つ
+- `options.ts`:確認済みの選択肢とラベル。歯面は位置のキー(`occlusal` など)で保持し、表示名は `getSurfaceLabels(jaw, toothNumber)` で歯の位置から決める。歯を変えても選択は残り、名称だけが切り替わる
+- `missingItems.ts`:`getMissingItems(form)` が「必須(`required`)」「確認してください(`needsConfirmation`)」「任意(`optional`)」の3グループを返す。生成を止めるのは `required` だけ
+- `buildDraft.ts`:`buildDraft(form)` が「ラベル:値」の行を固定順に並べ、値がある行だけを出す。`generateDraft(form)` は必須項目が不足していれば生成せず理由を返す。画面からは `generateDraft` を使う
+
+選択肢や下書きの文言を変えたら、同じ内容を固定しているテストも一緒に直す。
 
 Next.js 16(App Router、Turbopack)/ React 19 / Tailwind CSS 4。Next.js 16 は以前の版と API や規約が異なるため、Next.js の機能を使うコードを書く前に `AGENTS.md` の指示に従い `node_modules/next/dist/docs/` の該当ガイドを確認する。
 
