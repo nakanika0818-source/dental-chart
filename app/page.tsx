@@ -10,7 +10,7 @@ export default function Home() {
       </p>
       <CrRecordForm />
       <p className="mt-6 rounded-lg border border-accent bg-surface p-4 text-base leading-relaxed">
-        説明・次回予定・下書きの欄は準備中です。
+        未入力項目の一覧と下書きの欄は準備中です。
       </p>
     </main>
   );
