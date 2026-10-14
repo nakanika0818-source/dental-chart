@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import ExplanationSection from "./ExplanationSection";
+import MissingItemsSection from "./MissingItemsSection";
 import ProcedureSection from "./ProcedureSection";
 import ToothSection from "./ToothSection";
 import { createEmptyForm } from "@/lib/cr/types";
@@ -20,6 +21,7 @@ export default function CrRecordForm() {
       <ToothSection form={form} onChange={update} />
       <ProcedureSection form={form} onChange={update} />
       <ExplanationSection form={form} onChange={update} />
+      <MissingItemsSection form={form} />
     </form>
   );
 }
