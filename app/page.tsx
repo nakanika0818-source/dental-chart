@@ -9,9 +9,6 @@ export default function Home() {
         入力していない項目を確認し、下書きを修正してからコピーできます。
       </p>
       <CrRecordForm />
-      <p className="mt-6 rounded-lg border border-accent bg-surface p-4 text-base leading-relaxed">
-        リセットは準備中です。
-      </p>
     </main>
   );
 }

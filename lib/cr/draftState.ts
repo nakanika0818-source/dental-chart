@@ -18,6 +18,8 @@ export type DraftState = {
   copyStatus: CopyStatus;
   // 入力・下書きが変わるたびに増やす。コピー中に変わったら、その結果を表示しないために使う
   version: number;
+  // リセットしてよいか確認している間 true
+  confirmingReset: boolean;
 };
 
 export type DraftAction =
@@ -28,7 +30,10 @@ export type DraftAction =
   | { type: "inputChanged" }
   | { type: "setConfirmed"; confirmed: boolean }
   | { type: "copyStarted" }
-  | { type: "copyFinished"; version: number; ok: boolean };
+  | { type: "copyFinished"; version: number; ok: boolean }
+  | { type: "requestReset" }
+  | { type: "cancelReset" }
+  | { type: "reset" };
 
 export const initialDraftState: DraftState = {
   draft: "",
@@ -38,6 +43,7 @@ export const initialDraftState: DraftState = {
   confirmed: false,
   copyStatus: "idle",
   version: 0,
+  confirmingReset: false,
 };
 
 export function isDraftEdited(state: DraftState): boolean {
@@ -127,5 +133,12 @@ export function draftReducer(
         return state;
       }
       return { ...state, copyStatus: action.ok ? "success" : "failure" };
+    case "requestReset":
+      return { ...state, confirmingReset: true };
+    case "cancelReset":
+      return { ...state, confirmingReset: false };
+    case "reset":
+      // version だけは戻さずに増やす。0 に戻すと、リセット前に始めたコピーの結果が一致して表示されてしまう
+      return { ...initialDraftState, version: state.version + 1 };
   }
 }

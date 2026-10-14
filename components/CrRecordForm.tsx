@@ -6,6 +6,7 @@ import DraftSection from "./DraftSection";
 import ExplanationSection from "./ExplanationSection";
 import MissingItemsSection from "./MissingItemsSection";
 import ProcedureSection from "./ProcedureSection";
+import ResetSection from "./ResetSection";
 import ToothSection from "./ToothSection";
 import { draftReducer, initialDraftState } from "@/lib/cr/draftState";
 import { createEmptyForm } from "@/lib/cr/types";
@@ -24,6 +25,12 @@ export default function CrRecordForm() {
     setForm((current) => ({ ...current, ...patch }));
     // 入力を変えたら、確認チェックとコピーの表示を取り消す
     dispatchDraft({ type: "inputChanged" });
+  };
+
+  // 入力と下書き側の状態(確認チェック・コピー結果・エラー・各確認)を同時に初期化する
+  const resetAll = () => {
+    setForm(createEmptyForm());
+    dispatchDraft({ type: "reset" });
   };
 
   const selectAllDraft = () => {
@@ -54,6 +61,11 @@ export default function CrRecordForm() {
         state={draftState}
         dispatch={dispatchDraft}
         onSelectAll={selectAllDraft}
+      />
+      <ResetSection
+        state={draftState}
+        dispatch={dispatchDraft}
+        onReset={resetAll}
       />
     </form>
   );

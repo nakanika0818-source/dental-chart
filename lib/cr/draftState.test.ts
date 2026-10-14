@@ -34,6 +34,7 @@ describe("draftReducer:生成", () => {
       confirmed: false,
       copyStatus: "idle",
       version: 0,
+      confirmingReset: false,
     });
   });
 
