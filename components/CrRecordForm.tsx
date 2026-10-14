@@ -1,6 +1,7 @@
 "use client";
 
-import { useReducer, useState } from "react";
+import { useReducer, useRef, useState } from "react";
+import CopySection from "./CopySection";
 import DraftSection from "./DraftSection";
 import ExplanationSection from "./ExplanationSection";
 import MissingItemsSection from "./MissingItemsSection";
@@ -17,9 +18,23 @@ export default function CrRecordForm() {
     draftReducer,
     initialDraftState,
   );
+  const draftRef = useRef<HTMLTextAreaElement>(null);
 
   const update = (patch: Partial<FormState>) => {
     setForm((current) => ({ ...current, ...patch }));
+    // 入力を変えたら、確認チェックとコピーの表示を取り消す
+    dispatchDraft({ type: "inputChanged" });
+  };
+
+  const selectAllDraft = () => {
+    const textarea = draftRef.current;
+    if (textarea === null) {
+      return;
+    }
+    textarea.focus();
+    textarea.select();
+    // iOS Safari は select() だけでは選択されないことがある
+    textarea.setSelectionRange(0, textarea.value.length);
   };
 
   return (
@@ -28,7 +43,18 @@ export default function CrRecordForm() {
       <ProcedureSection form={form} onChange={update} />
       <ExplanationSection form={form} onChange={update} />
       <MissingItemsSection form={form} />
-      <DraftSection form={form} state={draftState} dispatch={dispatchDraft} />
+      <DraftSection
+        form={form}
+        state={draftState}
+        dispatch={dispatchDraft}
+        textareaRef={draftRef}
+      />
+      <CopySection
+        form={form}
+        state={draftState}
+        dispatch={dispatchDraft}
+        onSelectAll={selectAllDraft}
+      />
     </form>
   );
 }

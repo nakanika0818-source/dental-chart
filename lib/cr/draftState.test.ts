@@ -31,15 +31,19 @@ describe("draftReducer:生成", () => {
       generatedDraft: null,
       confirmingOverwrite: false,
       showReasons: false,
+      confirmed: false,
+      copyStatus: "idle",
+      version: 0,
     });
   });
 
   it("必須項目がそろっていれば generateDraft の結果をそのまま表示する", () => {
-    expect(generated).toEqual({
+    expect(generated).toMatchObject({
       draft: validDraft,
       generatedDraft: validDraft,
       confirmingOverwrite: false,
       showReasons: false,
+      confirmed: false,
     });
   });
 

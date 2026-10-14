@@ -10,7 +10,7 @@ export default function Home() {
       </p>
       <CrRecordForm />
       <p className="mt-6 rounded-lg border border-accent bg-surface p-4 text-base leading-relaxed">
-        確認チェック・コピー・リセットは準備中です。
+        リセットは準備中です。
       </p>
     </main>
   );

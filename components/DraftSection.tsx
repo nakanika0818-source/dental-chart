@@ -7,12 +7,19 @@ type Props = {
   form: FormState;
   state: DraftState;
   dispatch: (action: DraftAction) => void;
+  // コピーに失敗したとき、全文を選択するために使う
+  textareaRef?: React.Ref<HTMLTextAreaElement>;
 };
 
 const BUTTON_CLASS =
   "min-h-11 rounded-lg border border-foreground px-4 py-2 text-base font-bold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground";
 
-export default function DraftSection({ form, state, dispatch }: Props) {
+export default function DraftSection({
+  form,
+  state,
+  dispatch,
+  textareaRef,
+}: Props) {
   // 理由は最後に押したときのものではなく、今の入力で判定し直す
   const reasons = state.showReasons ? validateForGenerate(form) : [];
   const stale = isDraftStale(form, state);
@@ -105,6 +112,7 @@ export default function DraftSection({ form, state, dispatch }: Props) {
               )}
             </span>
             <textarea
+              ref={textareaRef}
               rows={10}
               autoComplete="off"
               value={state.draft}
