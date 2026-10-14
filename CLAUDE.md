@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 現状
 
-ステップ9(見た目の調整と完成条件の照合)まで完了し、F-01〜F-08 はすべて画面にある。手動確認の範囲は `DEVLOG.md` に記録している。`README.md` は作成済みで、スクリーンショットと公開URLは「未追加」としてある。GitHub への push・Vercel 公開・開発記事はまだで、ユーザーの指示を受けてから進める。公開したら README のスクリーンショットと公開URLの欄を更新する。
+ステップ9(見た目の調整と完成条件の照合)まで完了し、F-01〜F-08 はすべて画面にある。手動確認の範囲は `DEVLOG.md` に記録している。`README.md` は作成済みで、スクリーンショット(`screenshot.png`、下書きの欄の部分)は追加済み、公開URLは「未追加」としてある。GitHub への push・Vercel 公開・開発記事はまだで、ユーザーの指示を受けてから進める。公開したら README の公開URLの欄を更新する。
 
 ## コマンド
 
