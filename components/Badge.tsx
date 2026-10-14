@@ -1,7 +1,13 @@
-// 必須・任意の違いを色ではなく文字で示す
+// 必須・任意の違いを文字で示す。色と太さの違いは補助
 export default function Badge({ children }: { children: string }) {
+  const style =
+    children === "必須"
+      ? "border-foreground bg-notice font-bold"
+      : "border-foreground/60 bg-surface font-normal";
   return (
-    <span className="ml-2 rounded border border-foreground/40 px-1.5 py-0.5 text-sm font-normal">
+    <span
+      className={`ml-2 inline-block rounded border px-1.5 py-0.5 align-middle text-sm ${style}`}
+    >
       {children}
     </span>
   );

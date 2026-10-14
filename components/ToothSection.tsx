@@ -1,5 +1,7 @@
 import Badge from "./Badge";
 import ChoiceChip from "./ChoiceChip";
+import Section from "./Section";
+import { GUIDE_BOX } from "./ui";
 import {
   JAW_LABELS,
   SIDE_LABELS,
@@ -33,14 +35,7 @@ export default function ToothSection({ form, onChange }: Props) {
   };
 
   return (
-    <section
-      aria-labelledby="tooth-heading"
-      className="mt-6 rounded-lg border border-accent bg-surface p-4"
-    >
-      <h2 id="tooth-heading" className="text-xl font-bold">
-        処置部位
-      </h2>
-
+    <Section id="tooth" step={1} title="処置部位">
       <fieldset className="mt-4 min-w-0">
         <legend className="text-base font-bold">
           上顎・下顎
@@ -107,7 +102,7 @@ export default function ToothSection({ form, onChange }: Props) {
           <Badge>任意</Badge>
         </legend>
         {surfaceLabels === null ? (
-          <p className="mt-2 rounded-lg border border-dashed border-foreground/40 p-3 text-base">
+          <p className={`mt-2 ${GUIDE_BOX}`}>
             先に歯の位置(上顎・下顎と番号)を選んでください。
           </p>
         ) : (
@@ -126,6 +121,6 @@ export default function ToothSection({ form, onChange }: Props) {
           </div>
         )}
       </fieldset>
-    </section>
+    </Section>
   );
 }

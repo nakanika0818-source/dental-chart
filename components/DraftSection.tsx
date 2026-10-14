@@ -1,3 +1,13 @@
+import Section from "./Section";
+import {
+  PRIMARY_BUTTON,
+  SECONDARY_BUTTON,
+  HINT_CLASS,
+  CONFIRM_BOX,
+  NOTICE_BOX,
+  GUIDE_BOX,
+  FIELD_CLASS,
+} from "./ui";
 import { validateForGenerate } from "@/lib/cr/buildDraft";
 import { isDraftEdited, isDraftStale } from "@/lib/cr/draftState";
 import type { DraftAction, DraftState } from "@/lib/cr/draftState";
@@ -11,9 +21,6 @@ type Props = {
   textareaRef?: React.Ref<HTMLTextAreaElement>;
 };
 
-const BUTTON_CLASS =
-  "min-h-11 rounded-lg border border-foreground px-4 py-2 text-base font-bold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground";
-
 export default function DraftSection({
   form,
   state,
@@ -26,21 +33,15 @@ export default function DraftSection({
   const edited = isDraftEdited(state);
 
   return (
-    <section
-      aria-labelledby="draft-heading"
-      className="mt-6 rounded-lg border border-accent bg-surface p-4"
-    >
-      <h2 id="draft-heading" className="text-xl font-bold">
-        下書き
-      </h2>
-      <p className="mt-1 text-sm">
+    <Section id="draft" step={5} title="下書き">
+      <p className={HINT_CLASS}>
         入力内容を決まった形の文に並べます。入力していない内容は追加されません。
       </p>
 
       <button
         type="button"
         onClick={() => dispatch({ type: "generate", form })}
-        className={`mt-4 bg-accent ${BUTTON_CLASS}`}
+        className={`mt-4 ${PRIMARY_BUTTON}`}
       >
         {state.generatedDraft === null ? "下書きを生成" : "下書きを再生成"}
       </button>
@@ -48,7 +49,7 @@ export default function DraftSection({
       {reasons.length > 0 && (
         <div
           role="alert"
-          className="mt-4 rounded-lg border-l-4 border-foreground bg-notice p-3"
+          className={NOTICE_BOX}
         >
           <p className="text-base font-bold">
             下書きを生成できません。次の必須項目を入力してください。
@@ -66,7 +67,7 @@ export default function DraftSection({
       {state.confirmingOverwrite && (
         <div
           role="alert"
-          className="mt-4 rounded-lg border-2 border-foreground bg-notice p-3"
+          className={CONFIRM_BOX}
         >
           <p className="text-base font-bold">
             手で編集した下書きが、入力内容から作り直した文章で上書きされます。上書きしますか?
@@ -75,14 +76,14 @@ export default function DraftSection({
             <button
               type="button"
               onClick={() => dispatch({ type: "confirmOverwrite", form })}
-              className={`bg-accent ${BUTTON_CLASS}`}
+              className={PRIMARY_BUTTON}
             >
               上書きして再生成
             </button>
             <button
               type="button"
               onClick={() => dispatch({ type: "cancelOverwrite" })}
-              className={`bg-surface ${BUTTON_CLASS}`}
+              className={SECONDARY_BUTTON}
             >
               取り消す(編集内容を残す)
             </button>
@@ -91,7 +92,7 @@ export default function DraftSection({
       )}
 
       {state.generatedDraft === null ? (
-        <p className="mt-4 rounded-lg border border-dashed border-foreground/40 p-3 text-base">
+        <p className={`mt-4 ${GUIDE_BOX}`}>
           下書きはまだありません。「下書きを生成」を押すと、入力内容から作ります。
         </p>
       ) : (
@@ -99,7 +100,7 @@ export default function DraftSection({
           {stale && (
             <p
               role="status"
-              className="mt-4 rounded-lg border-l-4 border-foreground bg-notice p-3 text-base font-bold"
+              className={`${NOTICE_BOX} text-base font-bold`}
             >
               古い下書きです。生成したあとで入力が変更されています。必要なら再生成してください。
             </p>
@@ -119,11 +120,11 @@ export default function DraftSection({
               onChange={(event) =>
                 dispatch({ type: "edit", text: event.target.value })
               }
-              className="mt-2 block w-full min-w-0 rounded-lg border border-foreground/30 bg-surface px-3 py-2 text-base leading-relaxed focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
+              className={FIELD_CLASS}
             />
           </label>
         </>
       )}
-    </section>
+    </Section>
   );
 }

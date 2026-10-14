@@ -1,3 +1,11 @@
+import Section from "./Section";
+import {
+  PRIMARY_BUTTON,
+  SECONDARY_BUTTON,
+  HINT_CLASS,
+  NOTICE_BOX,
+  GUIDE_BOX,
+} from "./ui";
 import { getCopyBlockers } from "@/lib/cr/draftState";
 import type { DraftAction, DraftState } from "@/lib/cr/draftState";
 import type { FormState } from "@/lib/cr/types";
@@ -9,15 +17,11 @@ type Props = {
   onSelectAll: () => void;
 };
 
-const BUTTON_CLASS =
-  "min-h-11 rounded-lg border border-foreground px-4 py-2 text-base font-bold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground disabled:cursor-not-allowed disabled:border-dashed disabled:opacity-60";
-
 const STATUS_TEXT = {
   idle: "",
   copying: "コピーしています…",
   success: "コピーしました。貼り付け先で内容を確認してください。",
-  failure:
-    "コピーできませんでした。「全文を選択」を押してから、手動でコピーしてください(パソコンは Ctrl+C、スマートフォンは選択した文字を長押しして「コピー」)。",
+  failure: "コピーできませんでした。次の手順で手動でコピーしてください。",
 } as const;
 
 async function writeClipboard(text: string): Promise<boolean> {
@@ -52,15 +56,8 @@ export default function CopySection({
   };
 
   return (
-    <section
-      aria-labelledby="copy-heading"
-      className="mt-6 rounded-lg border border-accent bg-surface p-4"
-    >
-      <h2 id="copy-heading" className="text-xl font-bold">
-        確認・コピー
-      </h2>
-
-      <label className="relative mt-4 flex min-h-11 cursor-pointer items-center gap-3 rounded-lg border border-foreground/30 p-3 has-[:disabled]:cursor-not-allowed has-[:disabled]:opacity-60 has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-foreground">
+    <Section id="copy" step={6} title="確認・コピー">
+      <label className="relative mt-4 flex min-h-11 cursor-pointer items-center gap-3 rounded-lg border border-foreground/60 bg-surface p-3 hover:bg-notice has-[:checked]:border-foreground has-[:checked]:bg-accent has-[:disabled]:cursor-not-allowed has-[:disabled]:opacity-60 has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-foreground">
         <input
           type="checkbox"
           checked={state.confirmed}
@@ -72,12 +69,12 @@ export default function CopySection({
         />
         <span className="text-base font-bold">下書きの内容を確認した</span>
       </label>
-      <p className="mt-1 text-sm">
+      <p className={HINT_CLASS}>
         下書きを編集・再生成したときや、入力を変更したときは、チェックが外れます。
       </p>
 
       {blockers.length > 0 && (
-        <div className="mt-4 rounded-lg border border-dashed border-foreground/40 p-3">
+        <div className={`mt-4 ${GUIDE_BOX}`}>
           <p className="text-base font-bold">まだコピーできません。</p>
           <ul className="mt-1 list-disc pl-6 text-base">
             {blockers.map((blocker) => (
@@ -89,25 +86,14 @@ export default function CopySection({
         </div>
       )}
 
-      <div className="mt-4 flex flex-wrap gap-2">
-        <button
-          type="button"
-          disabled={blockers.length > 0 || copying}
-          onClick={copy}
-          className={`bg-accent ${BUTTON_CLASS}`}
-        >
-          下書きをコピー
-        </button>
-        {state.copyStatus === "failure" && (
-          <button
-            type="button"
-            onClick={onSelectAll}
-            className={`bg-surface ${BUTTON_CLASS}`}
-          >
-            全文を選択
-          </button>
-        )}
-      </div>
+      <button
+        type="button"
+        disabled={blockers.length > 0 || copying}
+        onClick={copy}
+        className={`mt-4 ${PRIMARY_BUTTON}`}
+      >
+        下書きをコピー
+      </button>
 
       <p
         role="status"
@@ -115,11 +101,30 @@ export default function CopySection({
         className={
           state.copyStatus === "idle"
             ? "sr-only"
-            : "mt-4 rounded-lg border-l-4 border-foreground bg-notice p-3 text-base font-bold"
+            : `${NOTICE_BOX} text-base font-bold`
         }
       >
         {STATUS_TEXT[state.copyStatus]}
       </p>
-    </section>
+
+      {state.copyStatus === "failure" && (
+        <div className={`mt-2 ${GUIDE_BOX}`}>
+          <ol className="list-decimal pl-6 text-base leading-relaxed">
+            <li>下の「全文を選択」を押す(上の下書きの欄が全文選択されます)</li>
+            <li className="mt-1">
+              パソコンは Ctrl+C(Mac は ⌘+C)、スマートフォンは選択した文字を長押しして「コピー」を選ぶ
+            </li>
+            <li className="mt-1">貼り付け先で内容を確認する</li>
+          </ol>
+          <button
+            type="button"
+            onClick={onSelectAll}
+            className={`mt-3 ${SECONDARY_BUTTON}`}
+          >
+            全文を選択
+          </button>
+        </div>
+      )}
+    </Section>
   );
 }

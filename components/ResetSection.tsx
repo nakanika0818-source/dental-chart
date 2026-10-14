@@ -1,3 +1,10 @@
+import Section from "./Section";
+import {
+  PRIMARY_BUTTON,
+  SECONDARY_BUTTON,
+  HINT_CLASS,
+  CONFIRM_BOX,
+} from "./ui";
 import type { DraftAction, DraftState } from "@/lib/cr/draftState";
 
 type Props = {
@@ -6,26 +13,17 @@ type Props = {
   onReset: () => void;
 };
 
-const BUTTON_CLASS =
-  "min-h-11 rounded-lg border border-foreground px-4 py-2 text-base font-bold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground";
-
 export default function ResetSection({ state, dispatch, onReset }: Props) {
   return (
-    <section
-      aria-labelledby="reset-heading"
-      className="mt-6 rounded-lg border border-accent bg-surface p-4"
-    >
-      <h2 id="reset-heading" className="text-xl font-bold">
-        リセット
-      </h2>
-      <p className="mt-1 text-sm">
+    <Section id="reset" step={7} title="リセット">
+      <p className={HINT_CLASS}>
         コピーが終わったら、次の記録の前に入力と下書きを消去してください。
       </p>
 
       {state.confirmingReset ? (
         <div
           role="alert"
-          className="mt-4 rounded-lg border-2 border-foreground bg-notice p-3"
+          className={CONFIRM_BOX}
         >
           <p className="text-base font-bold">
             入力・下書き・確認チェックをすべて消去します。元に戻せません。消去しますか?
@@ -34,14 +32,14 @@ export default function ResetSection({ state, dispatch, onReset }: Props) {
             <button
               type="button"
               onClick={onReset}
-              className={`bg-accent ${BUTTON_CLASS}`}
+              className={PRIMARY_BUTTON}
             >
               消去する
             </button>
             <button
               type="button"
               onClick={() => dispatch({ type: "cancelReset" })}
-              className={`bg-surface ${BUTTON_CLASS}`}
+              className={SECONDARY_BUTTON}
             >
               取り消す(消去しない)
             </button>
@@ -51,11 +49,11 @@ export default function ResetSection({ state, dispatch, onReset }: Props) {
         <button
           type="button"
           onClick={() => dispatch({ type: "requestReset" })}
-          className={`mt-4 bg-surface ${BUTTON_CLASS}`}
+          className={`mt-4 ${SECONDARY_BUTTON}`}
         >
           入力と下書きをすべて消去
         </button>
       )}
-    </section>
+    </Section>
   );
 }

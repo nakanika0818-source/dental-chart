@@ -102,6 +102,10 @@ describe("CopySection", () => {
     );
     expect(html).toContain("コピーできませんでした。");
     expect(html).toContain(">全文を選択</button>");
+    // 手動コピーの手順をパソコン・スマートフォンの両方について示す
+    expect(html).toContain("Ctrl+C");
+    expect(html).toContain("長押しして「コピー」");
+    expect(html).toContain("貼り付け先で内容を確認する");
   });
 
   it("結果の表示は読み上げ用の領域に出す", () => {

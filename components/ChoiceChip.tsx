@@ -15,7 +15,7 @@ export default function ChoiceChip({
   children,
 }: Props) {
   return (
-    <label className="relative inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-center gap-1 rounded-lg border border-foreground/30 bg-surface px-3 py-2 text-base has-[:checked]:border-foreground has-[:checked]:bg-accent has-[:checked]:font-bold has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-foreground">
+    <label className="relative inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-center gap-1 rounded-lg border border-foreground/60 bg-surface px-3 py-2 text-base hover:bg-notice has-[:checked]:border-foreground has-[:checked]:bg-accent has-[:checked]:font-bold has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-foreground">
       <input
         type={type}
         name={name}

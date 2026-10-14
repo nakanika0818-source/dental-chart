@@ -1,6 +1,8 @@
 import Badge from "./Badge";
 import ChoiceChip from "./ChoiceChip";
+import Section from "./Section";
 import TextField from "./TextField";
+import { HINT_CLASS } from "./ui";
 import { EXPLANATION_OPTIONS } from "@/lib/cr/options";
 import type { ExplanationKey, FormState } from "@/lib/cr/types";
 
@@ -19,20 +21,13 @@ export default function ExplanationSection({ form, onChange }: Props) {
   };
 
   return (
-    <section
-      aria-labelledby="explanation-heading"
-      className="mt-6 rounded-lg border border-accent bg-surface p-4"
-    >
-      <h2 id="explanation-heading" className="text-xl font-bold">
-        説明・次回予定・補足
-      </h2>
-
+    <Section id="explanation" step={3} title="説明・次回予定・補足">
       <fieldset className="mt-4 min-w-0">
         <legend className="text-base font-bold">
           患者に説明した項目(複数選択できます)
           <Badge>任意</Badge>
         </legend>
-        <p className="mt-1 text-sm">
+        <p className={HINT_CLASS}>
           下書きには選択した項目名だけが入ります。説明の文章は自動では追加されません。
         </p>
         <div className="mt-2 flex flex-wrap gap-2">
@@ -72,6 +67,6 @@ export default function ExplanationSection({ form, onChange }: Props) {
         value={form.remarks}
         onChange={(remarks) => onChange({ remarks })}
       />
-    </section>
+    </Section>
   );
 }

@@ -1,6 +1,8 @@
 import Badge from "./Badge";
 import ChoiceChip from "./ChoiceChip";
+import Section from "./Section";
 import TextField from "./TextField";
+import { HINT_CLASS } from "./ui";
 import { anesthesiaPatch } from "@/lib/cr/formUpdates";
 import { ANESTHESIA_OPTIONS, PROCEDURE_OPTIONS } from "@/lib/cr/options";
 import type { FormState, ProcedureKey } from "@/lib/cr/types";
@@ -20,20 +22,13 @@ export default function ProcedureSection({ form, onChange }: Props) {
   };
 
   return (
-    <section
-      aria-labelledby="procedure-heading"
-      className="mt-6 rounded-lg border border-accent bg-surface p-4"
-    >
-      <h2 id="procedure-heading" className="text-xl font-bold">
-        処置内容
-      </h2>
-
+    <Section id="procedure" step={2} title="処置内容">
       <fieldset className="mt-4 min-w-0">
         <legend className="text-base font-bold">
           実施した処置(複数選択できます)
           <Badge>必須</Badge>
         </legend>
-        <p className="mt-1 text-sm">
+        <p className={HINT_CLASS}>
           1つ以上選ぶか、下の補足に記入してください。
         </p>
         <div className="mt-2 flex flex-wrap gap-2">
@@ -102,6 +97,6 @@ export default function ProcedureSection({ form, onChange }: Props) {
         value={form.shade}
         onChange={(shade) => onChange({ shade })}
       />
-    </section>
+    </Section>
   );
 }

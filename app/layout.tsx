@@ -13,7 +13,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full flex flex-col">
         <p
           role="note"
-          className="bg-notice px-4 py-2 text-center text-base font-bold text-foreground"
+          className="border-b border-accent bg-notice px-4 py-2 text-center text-base font-bold text-foreground"
         >
           講座用デモ・架空の情報のみ入力してください
         </p>
