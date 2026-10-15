@@ -41,7 +41,7 @@ CR処置後の記録を入力する歯科医師・スタッフ(講座での利�
 | スタイル | Tailwind CSS 4.3 |
 | テスト | Vitest 5.0.3 |
 | Lint | ESLint 9(eslint-config-next) |
-| 公開先(予定) | Vercel |
+| 公開先 | Vercel(公開済み) |
 
 ログイン・データベース・外部 API は使用していません。
 
@@ -106,7 +106,8 @@ npm run lint    # ESLint
 
 ## 公開URL
 
-**未追加です。** Vercel への公開と GitHub リポジトリの公開は、まだ行っていません。
+- アプリ(Vercel):https://dental-chart-one.vercel.app/
+- ソースコード(GitHub):https://github.com/nakanika0818-source/dental-chart
 
 ## 関連ドキュメント
 
